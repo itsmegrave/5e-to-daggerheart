@@ -1,0 +1,11 @@
+// Cloudflare Workers static-assets deployment. The app is fully client-side:
+// `npm run deploy` builds to ./dist and uploads it. No Worker script is needed.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "5e-to-daggerheart",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
