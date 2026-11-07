@@ -11,7 +11,7 @@ export interface Dict {
     notes: string; notesHelp: string; copyMarkdown: string; copyText: string; downloadJson: string;
     copied: string; empty: string; parseError: string; review: string; reviewHint: string;
     rules: string; source: string; themeToggle: string; uiLang: string;
-    noteLevels: Record<NoteLevel, string>; detected: string; legal: string; name: string; attackName: string; heroTag: string;
+    noteLevels: Record<NoteLevel, string>; detected: string; legal: string; name: string; attackName: string; heroTag: string; madeWith: string; by: string;
   };
   terms: {
     tier: string; difficulty: string; thresholds: string; hp: string; stress: string; atk: string;

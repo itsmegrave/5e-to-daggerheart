@@ -14,6 +14,7 @@ import { formatCR, noteText, toMarkdown, toPlainText } from '../core/render';
 import { SAMPLES } from '../core/samples';
 import type { AdversaryType, Monster5e, NoteLevel, Tier } from '../core/types';
 import { DICTS, type Lang } from '../i18n';
+import { SprayHeart } from './SprayHeart';
 import { StatBlock } from './StatBlock';
 
 const REPO = 'https://github.com/itsmegrave/5e-to-daggerheart';
@@ -292,12 +293,18 @@ export function App() {
                 )}
         </div>
 
-        <Text size="xs" mt={40} maw={720} className="legal">
+        <footer className="site-footer">
+          <p className="signature">
+            {ui.madeWith} <SprayHeart /> {ui.by}{' '}
+            <a href="https://github.com/itsmegrave" target="_blank" rel="noopener">itsmegrave</a>
+          </p>
+        <Text size="xs" maw={720} className="legal">
           {ui.legal}{' '}
           <Anchor href={RULES[uiLang]} target="_blank" rel="noopener" size="xs" fw={700} c="inherit" td="underline">{ui.rules}</Anchor>
           {', '}
           <Anchor href={REPO} target="_blank" rel="noopener" size="xs" fw={700} c="inherit" td="underline">{ui.source}</Anchor>
         </Text>
+        </footer>
       </Container>
     </>
   );

@@ -49,7 +49,7 @@ body {
   background-color: var(--page);
   background-image: radial-gradient(var(--dots) 1.4px, transparent 1.6px);
   background-size: 14px 14px;
-  min-height: 100%;
+  min-height: 100vh;
 }
 
 /* ---------- street bar ---------- */
@@ -339,6 +339,39 @@ textarea.stat-input {
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
 }
+.site-footer {
+  margin-top: 48px;
+  display: grid;
+  gap: 14px;
+}
+.signature {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-family: var(--font-tag);
+  font-size: clamp(22px, 4vw, 30px);
+  color: var(--ink);
+  transform: rotate(-2deg);
+  transform-origin: left center;
+}
+.signature a {
+  color: var(--fear);
+  text-decoration: none;
+  text-shadow: 2px 2px 0 var(--hope);
+}
+.signature a:hover { text-decoration: underline wavy var(--hope); text-underline-offset: 6px; }
+.signature a:focus-visible { outline: 3px solid var(--codex); outline-offset: 4px; border-radius: 4px; }
+.spray-heart {
+  display: inline-block;
+  transform: rotate(-10deg) translateY(8px);
+  margin-inline: 2px;
+  overflow: visible;
+}
+[data-mantine-color-scheme='dark'] .signature { color: #f5efff; }
+[data-mantine-color-scheme='dark'] .spray-heart .heart-line { stroke: #f5efff; }
+[data-mantine-color-scheme='dark'] .signature a { color: var(--fear-soft); text-shadow: 2px 2px 0 #000; }
 .legal { color: var(--ink); opacity: 0.75; }
 [data-mantine-color-scheme='dark'] .legal { color: #f5efff; }
 
