@@ -8,7 +8,8 @@ import type { Dict } from './types';
 const pt: Dict = {
   ui: {
     appTitle: '5e → Daggerheart',
-    tagline: 'Transforme uma criatura de D&D 5e em um adversário de Daggerheart.',
+    tagline: 'Cole uma criatura de D&D 5e e leve um adversário de Daggerheart pronto para a mesa, com notas sobre cada número.',
+    heroTag: 'converte aí!',
     input: 'Criatura de 5e',
     inputHelp: 'Cole um bloco de estatísticas (em português ou inglês, formato 2014 ou 2024) ou um JSON do 5etools / Open5e.',
     inputPlaceholder: 'Goblin\nHumanoide (goblinoide) Pequeno, neutro e mau\nClasse de Armadura 15 (armadura de couro, escudo)\n…',

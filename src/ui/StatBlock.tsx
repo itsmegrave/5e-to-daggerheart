@@ -1,5 +1,4 @@
-import { Badge, Group, Paper, Stack, Text, Title, Tooltip } from '@mantine/core';
-import { IconAlertTriangle } from '@tabler/icons-react';
+import { Paper, Stack, Text, Title, Tooltip } from '@mantine/core';
 import { renderAdversary } from '../core/render';
 import type { Adversary } from '../core/types';
 import { DICTS, type Lang } from '../i18n';
@@ -10,72 +9,67 @@ interface Props {
   uiLang: Lang;
 }
 
-/** The converted adversary, laid out like a Daggerheart SRD stat block. */
+const KIND_CLASS = ['passive', 'action', 'reaction'] as const;
+
+/** The converted adversary as a sticker, with its tier slapped on the corner. */
 export function StatBlock({ adversary, lang, uiLang }: Props) {
   const r = renderAdversary(adversary, lang);
   const t = DICTS[lang].terms;
   const ui = DICTS[uiLang].ui;
 
   return (
-    <Paper withBorder p={{ base: 'md', sm: 'lg' }} className="statblock" aria-label={r.name}>
-      <Stack gap="sm">
+    <Paper p={{ base: 'md', sm: 'lg' }} radius="lg" className="statblock" aria-label={r.name}>
+      <div className={`tier-sticker tier-${adversary.tier}`} aria-label={r.subtitle}>
+        <span className="tier-num">{t.tier} {adversary.tier}</span>
+        <span className="tier-type">{t.types[adversary.type]}</span>
+      </div>
+
+      <Stack gap="md">
         <div>
-          <Title order={2} className="statblock-name" fz={{ base: 24, sm: 28 }}>{r.name || '—'}</Title>
-          <Text fs="italic" fw={600} c="dimmed">{r.subtitle}</Text>
+          <Title order={2} className="statblock-name" fz={{ base: 26, sm: 32 }}>{r.name || '—'}</Title>
+          <Text size="sm" mt={6}>
+            <Text span fw={800}>{t.motives}: </Text>
+            {r.motives}
+          </Text>
         </div>
 
-        <Text size="sm">
-          <Text span fw={700}>{t.motives}: </Text>
-          {r.motives}
-        </Text>
-
-        <hr className="statblock-rule" />
-
-        <Group gap="md" className="statblock-stats" wrap="wrap">
+        <div className="stat-row">
           {r.stats.map(([k, v]) => (
-            <Text key={k} size="sm">
-              <Text span fw={700}>{k}: </Text>{v}
-            </Text>
+            <div className="stat-chip" key={k}>
+              <div className="k">{k}</div>
+              <div className="v">{v}</div>
+            </div>
           ))}
-        </Group>
-        <Text size="sm" className="statblock-stats">
-          <Text span fw={700}>{t.atk}: </Text>
-          {r.attack.replace(/^[^:]+:\s*/, '')}
-        </Text>
+        </div>
+
+        <div className="attack-strip">
+          <b>{t.atk}</b> {r.attack.replace(/^[^:]+:\s*/, '')}
+        </div>
+
         {r.experience && (
           <Text size="sm">
-            <Text span fw={700}>{t.experience}: </Text>{r.experience}
+            <Text span fw={800}>{t.experience}: </Text>{r.experience}
           </Text>
         )}
 
         {r.features.length > 0 && (
-          <>
-            <hr className="statblock-rule" />
-            <Title order={3} size="h5" tt="uppercase" lts="0.06em">{t.features}</Title>
-            <Stack gap="xs">
-              {r.features.map((f, i) => (
-                <Text key={`${f.title}-${i}`} size="sm" lh={1.55}>
-                  <span className="feature-title">{f.title} - {f.kind}: </span>
+          <Stack gap="sm">
+            <div><span className="tape fear">{t.features}</span></div>
+            {r.features.map((f, i) => {
+              const kind = KIND_CLASS.find((k) => t.kinds[k] === f.kind) ?? 'action';
+              return (
+                <Text key={`${f.title}-${i}`} size="sm" lh={1.55} className={`feature k-${kind}`}>
+                  <span className="feature-title">{f.title} – {f.kind}: </span>
                   {f.text}
                   {f.review && (
                     <Tooltip label={ui.reviewHint} multiline w={240} events={{ hover: true, focus: true, touch: true }}>
-                      <Badge
-                        ml={6}
-                        size="xs"
-                        variant="light"
-                        color="yellow"
-                        leftSection={<IconAlertTriangle size={10} />}
-                        tabIndex={0}
-                        style={{ verticalAlign: 'middle', cursor: 'help' }}
-                      >
-                        {ui.review}
-                      </Badge>
+                      <span className="review-flag" tabIndex={0}>{ui.review}</span>
                     </Tooltip>
                   )}
                 </Text>
-              ))}
-            </Stack>
-          </>
+              );
+            })}
+          </Stack>
         )}
       </Stack>
     </Paper>

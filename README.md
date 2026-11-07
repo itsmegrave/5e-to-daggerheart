@@ -13,7 +13,7 @@ The rules are documented in [docs/CONVERSION_RULES.md](docs/CONVERSION_RULES.md)
 
 ## Development
 
-Requires Node 20+.
+Requires Node 26 (current LTS). The version is pinned in `.nvmrc` / `.node-version`, which Cloudflare's build also reads.
 
 ```sh
 npm install

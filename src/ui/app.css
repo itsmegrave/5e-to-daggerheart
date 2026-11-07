@@ -1,51 +1,352 @@
-/* Stat block styling, modeled on the Daggerheart SRD layout. Colors come from Mantine tokens so both schemes work. */
-.statblock {
-  border-top: 4px solid var(--mantine-color-grape-filled);
+/*
+  Layout: a street-poster page. A black "street bar" header, a sprayed hero title,
+  then sticker panels in two columns (input left, result right), one column on phones.
+  Every panel is a sticker: white card, thick ink outline, hard offset shadow.
+  The one loud element is the tier sticker slapped crooked on the stat block; its color encodes the tier.
+*/
+:root {
+  /* Daggerheart palette: Hope (gold) and Fear (violet), the two Duality Dice,
+     plus domain-card colors (Sage, Codex, Blade) as the extra paint cans. */
+  --ink: #1a0f28;          /* outlines and text, violet-black */
+  --paper: #ffffff;        /* sticker panels */
+  --page: #ece4f7;         /* pale lavender wall */
+  --dots: rgba(124, 77, 204, 0.2);
+  --hope: #f2b83b;         /* Hope die gold */
+  --fear: #7c4dcc;         /* Fear die violet */
+  --fear-soft: #b593f2;    /* Fear as a fill that keeps dark text readable */
+  --codex: #5aa9e6;        /* Codex blue */
+  --sage: #6fc27a;         /* Sage green */
+  --blade: #e0566b;        /* Blade crimson */
+  --muted: #5e5170;
+  --shadow: var(--ink);
+  --field: #ffffff;
+
+  --font-display: Bungee, Impact, 'Arial Black', sans-serif;
+  --font-body: 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif;
+  --font-tag: 'Permanent Marker', 'Comic Sans MS', cursive;
+
+  --stroke: 3px;
+  --lift: 6px;
 }
 
-.statblock-name {
-  font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
-  letter-spacing: 0.01em;
+[data-mantine-color-scheme='dark'] {
+  --ink: #0b0614;
+  --paper: #23173b;
+  --page: #140b22;         /* the dark of a Fear-heavy night */
+  --dots: rgba(242, 184, 59, 0.12);
+  --muted: #c3b5dc;
+  --shadow: #f2b83b;       /* gold shadows at night */
+  --field: #1b1230;
+  --mantine-color-body: #140b22;
+  --mantine-color-text: #f5efff;
+  --mantine-color-dimmed: #c3b5dc;
+}
+
+html, body { background: var(--page); }
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--page);
+  background-image: radial-gradient(var(--dots) 1.4px, transparent 1.6px);
+  background-size: 14px 14px;
+  min-height: 100%;
+}
+
+/* ---------- street bar ---------- */
+.street-bar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  background: var(--ink);
+  color: #fff;
+  border-bottom: var(--stroke) solid var(--hope);
+  padding-block: 10px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 21;
+  background: var(--ink);
+}
+.street-logo {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: #fff;
+}
+.street-logo .arrow { color: var(--sage); }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative;
+  padding-block: clamp(20px, 5vw, 44px) clamp(12px, 3vw, 28px);
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(38px, 9vw, 92px);
+  line-height: 0.95;
+  margin: 0;
+  color: #fff;
+  -webkit-text-stroke: clamp(1.5px, 0.35vw, 3px) var(--ink);
+  paint-order: stroke fill;
+  text-shadow:
+    4px 4px 0 var(--fear),
+    8px 8px 0 var(--hope),
+    11px 11px 0 var(--ink);
+  transform: skew(-6deg) rotate(-2deg);
+  transform-origin: left bottom;
   text-wrap: balance;
 }
+.hero-title .five { color: var(--sage); }
+.hero-tag {
+  display: inline-block;
+  margin-top: clamp(10px, 2vw, 16px);
+  font-family: var(--font-tag);
+  font-size: clamp(22px, 4.5vw, 36px);
+  color: var(--hope);
+  transform: rotate(-7deg);
+  margin-left: clamp(4px, 2vw, 20px);
+  text-shadow: 2px 2px 0 var(--ink), -1px -1px 0 var(--ink);
+}
+.hero-sub {
+  font-size: clamp(15px, 2.2vw, 18px);
+  font-weight: 600;
+  max-width: 46ch;
+  margin-top: 14px;
+  color: var(--ink);
+}
+[data-mantine-color-scheme='dark'] .hero-sub { color: #f5efff; }
 
-.statblock-rule {
-  border: 0;
-  border-top: 1px solid var(--mantine-color-default-border);
+/* ---------- stickers ---------- */
+.panel {
+  background: var(--paper) !important;
+  border: var(--stroke) solid var(--ink) !important;
+  box-shadow: var(--lift) var(--lift) 0 var(--shadow);
+}
+[data-mantine-color-scheme='dark'] .panel { border-color: #000 !important; }
+
+.panel-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.1;
   margin: 0;
 }
 
-.statblock-stats {
-  font-variant-numeric: tabular-nums;
+/* Section headings painted on a tape strip. */
+.tape {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 15px;
+  padding: 3px 12px 2px;
+  background: var(--hope);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  transform: rotate(-1.5deg);
 }
+.tape.codex { background: var(--codex); }
+.tape.fear { background: var(--fear-soft); }
 
-.feature-title {
-  font-weight: 700;
-  font-style: italic;
+/* ---------- buttons ---------- */
+.btn-sticker {
+  border: 2px solid var(--ink) !important;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-weight: 800;
+  transition: transform 80ms ease, box-shadow 80ms ease;
 }
-
-.notes-list li + li {
-  margin-top: 6px;
+.btn-sticker:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink);
 }
+.btn-sticker:focus-visible {
+  outline: 3px solid var(--codex);
+  outline-offset: 2px;
+}
+.street-bar .btn-sticker { border-color: #fff !important; box-shadow: 2px 2px 0 var(--hope); }
 
+/* Example stickers: each its own can of paint, slapped slightly crooked. */
+.sample-sticker {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 13px;
+  padding: 6px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 80ms ease, box-shadow 80ms ease;
+}
+.sample-sticker:nth-child(5n + 1) { background: var(--sage); transform: rotate(-2deg); }
+.sample-sticker:nth-child(5n + 2) { background: var(--codex); transform: rotate(1.5deg); }
+.sample-sticker:nth-child(5n + 3) { background: var(--fear-soft); transform: rotate(-1deg); }
+.sample-sticker:nth-child(5n + 4) { background: var(--hope); transform: rotate(2deg); }
+.sample-sticker:nth-child(5n + 5) { background: #f49aa8; transform: rotate(-1.5deg); }
+.sample-sticker:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+.sample-sticker:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+/* ---------- form fields ---------- */
+.field {
+  background: var(--field) !important;
+  border: 2px solid var(--ink) !important;
+  font-weight: 500;
+}
+[data-mantine-color-scheme='dark'] .field { border-color: #000 !important; color: #f5efff; }
+.field:focus { outline: 3px solid var(--codex); outline-offset: 1px; }
 textarea.stat-input {
   font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   font-size: 13px;
   line-height: 1.5;
 }
-
-/* Keep the header clear of phone notches and system bars. */
-.app-header {
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
+.seg {
+  border: 2px solid var(--ink);
+  background: var(--field);
 }
 
+/* ---------- stat block ---------- */
+.statblock { position: relative; overflow: visible; }
+.statblock-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.05;
+  text-wrap: balance;
+  padding-right: 120px; /* room for the tier sticker */
+}
+.tier-sticker {
+  position: absolute;
+  top: -18px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  min-width: 108px;
+  padding: 8px 12px 6px;
+  border: var(--stroke) solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: rotate(6deg);
+  color: var(--ink);
+  text-align: center;
+}
+.tier-sticker .tier-num { font-family: var(--font-display); font-size: 26px; line-height: 1; }
+.tier-sticker .tier-type { font-weight: 800; font-size: 13px; line-height: 1.2; }
+.tier-1 { background: var(--sage); }
+.tier-2 { background: var(--codex); }
+.tier-3 { background: var(--fear-soft); }
+.tier-4 { background: var(--hope); }
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.stat-chip {
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 6px 8px;
+  text-align: center;
+  background: var(--field);
+}
+.stat-chip .k { font-size: 12px; font-weight: 700; color: var(--muted); }
+.stat-chip .v { font-family: var(--font-display); font-size: 22px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+@media (max-width: 420px) {
+  .stat-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .statblock-name { padding-right: 0; padding-top: 40px; }
+}
+
+.attack-strip {
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 8px 12px;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.attack-strip b { color: var(--hope); }
+
+.feature {
+  border-left: 5px solid var(--codex);
+  padding: 2px 0 2px 12px;
+}
+.feature.k-passive { border-left-color: var(--sage); }
+.feature.k-action { border-left-color: var(--blade); }
+.feature.k-reaction { border-left-color: var(--fear); }
+.feature-title { font-weight: 800; }
+
+.review-flag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 8px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--hope);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 800;
+  vertical-align: 1px;
+  cursor: help;
+}
+
+/* ---------- notes ---------- */
+.notes-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.note-dot {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  margin-top: 5px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+}
+.note-dot.info { background: var(--codex); }
+.note-dot.review { background: var(--hope); }
+.note-dot.dropped { background: var(--blade); }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; font-weight: 700; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend .note-dot { margin-top: 0; }
+
+/* ---------- workbench layout ---------- */
+/* Desktop: input and adjustments on the left, result and notes on the right.
+   Phone: input, then the converted stat block, then adjustments and notes. */
+.workbench {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'input' 'result' 'adjust' 'notes';
+  align-items: start;
+}
+.area-input { grid-area: input; }
+.area-result { grid-area: result; display: grid; gap: 14px; min-width: 0; }
+.area-adjust { grid-area: adjust; }
+.area-notes { grid-area: notes; }
+@media (min-width: 62em) {
+  .workbench {
+    gap: 28px 32px;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas: 'input result' 'adjust notes';
+  }
+}
+
+/* ---------- page ---------- */
 .app-main {
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
 }
+.legal { color: var(--ink); opacity: 0.75; }
+[data-mantine-color-scheme='dark'] .legal { color: #f5efff; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 }

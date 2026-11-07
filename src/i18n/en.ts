@@ -3,7 +3,8 @@ import type { Dict } from './types';
 const en: Dict = {
   ui: {
     appTitle: '5e → Daggerheart',
-    tagline: 'Turn a D&D 5e creature into a Daggerheart adversary.',
+    tagline: 'Paste a D&D 5e creature and get a Daggerheart adversary ready for the table, with notes on every number.',
+    heroTag: 'convert it!',
     input: '5e creature',
     inputHelp: 'Paste a stat block (English or Portuguese, 2014 or 2024 layout) or 5etools / Open5e JSON.',
     inputPlaceholder: 'Goblin\nSmall humanoid (goblinoid), neutral evil\nArmor Class 15 (leather armor, shield)\n…',
