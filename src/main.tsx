@@ -1,3 +1,6 @@
+import '@fontsource/bungee';
+import '@fontsource-variable/archivo';
+import '@fontsource/permanent-marker';
 import '@mantine/core/styles.css';
 import './ui/app.css';
 import { MantineProvider, localStorageColorSchemeManager } from '@mantine/core';

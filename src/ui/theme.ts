@@ -19,7 +19,7 @@ export const theme = createTheme({
   luminanceThreshold: 0.45,
   black: '#141019',
   defaultRadius: 'lg',
-  fontFamily: 'Archivo, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+  fontFamily: '"Archivo Variable", Archivo, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
   headings: {
     fontFamily: 'Bungee, Impact, "Arial Black", sans-serif',
     fontWeight: '400',

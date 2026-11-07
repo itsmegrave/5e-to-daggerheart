@@ -18,7 +18,7 @@
   --field: #ffffff;
 
   --font-display: Bungee, Impact, 'Arial Black', sans-serif;
-  --font-body: Archivo, ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif;
   --font-tag: 'Permanent Marker', 'Comic Sans MS', cursive;
 
   --stroke: 3px;
@@ -102,10 +102,11 @@ body::before {
 .hero-title .five { color: var(--lime); }
 .hero-tag {
   display: inline-block;
+  margin-top: clamp(10px, 2vw, 16px);
   font-family: var(--font-tag);
   font-size: clamp(22px, 4.5vw, 36px);
   color: var(--spray);
-  transform: rotate(-7deg) translateY(-4px);
+  transform: rotate(-7deg);
   margin-left: clamp(4px, 2vw, 20px);
   text-shadow: 2px 2px 0 var(--ink);
 }
@@ -305,6 +306,28 @@ textarea.stat-input {
 .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; font-weight: 700; }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
 .legend .note-dot { margin-top: 0; }
+
+/* ---------- workbench layout ---------- */
+/* Desktop: input and adjustments on the left, result and notes on the right.
+   Phone: input, then the converted stat block, then adjustments and notes. */
+.workbench {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: 'input' 'result' 'adjust' 'notes';
+  align-items: start;
+}
+.area-input { grid-area: input; }
+.area-result { grid-area: result; display: grid; gap: 14px; min-width: 0; }
+.area-adjust { grid-area: adjust; }
+.area-notes { grid-area: notes; }
+@media (min-width: 62em) {
+  .workbench {
+    gap: 28px 32px;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas: 'input result' 'adjust notes';
+  }
+}
 
 /* ---------- page ---------- */
 .app-main {

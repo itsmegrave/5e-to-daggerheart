@@ -6,6 +6,7 @@ import {
 import {
   IconBook, IconBrandGithub, IconCheck, IconCopy, IconDownload, IconFileUpload, IconMoon, IconSun, IconTrash,
 } from '@tabler/icons-react';
+import { useMediaQuery } from '@mantine/hooks';
 import { useEffect, useMemo, useState } from 'react';
 import { convert } from '../core/convert';
 import { parseInput } from '../core/parse';
@@ -51,6 +52,7 @@ export function App() {
   const terms = DICTS[uiLang].terms;
   const { setColorScheme } = useMantineColorScheme();
   const scheme = useComputedColorScheme('light');
+  const isPhone = useMediaQuery('(max-width: 48em)');
 
   useEffect(() => { save('5e2dh-lang', uiLang); document.documentElement.lang = uiLang === 'pt' ? 'pt-BR' : 'en'; }, [uiLang]);
   useEffect(() => { save('5e2dh-input', input); }, [input]);
@@ -151,10 +153,8 @@ export function App() {
           <p className="hero-sub">{ui.tagline}</p>
         </section>
 
-        <Grid gutter={{ base: 'lg', md: 28 }}>
-          <Grid.Col span={{ base: 12, md: 5 }}>
-            <Stack gap="lg">
-              <Card p="lg">
+        <div className="workbench">
+              <Card p="lg" className="area-input">
                 <Stack gap="sm">
                   <Group justify="space-between" align="center" wrap="wrap" gap="xs">
                     <label htmlFor="stat-input" className="tape">{ui.input}</label>
@@ -172,8 +172,8 @@ export function App() {
                     placeholder={ui.inputPlaceholder}
                     description={ui.inputHelp}
                     autosize
-                    minRows={8}
-                    maxRows={20}
+                    minRows={isPhone ? 6 : 8}
+                    maxRows={isPhone ? 11 : 20}
                     spellCheck={false}
                     classNames={{ input: 'field stat-input' }}
                   />
@@ -198,7 +198,7 @@ export function App() {
                 </Stack>
               </Card>
 
-              <Card p="lg">
+              <Card p="lg" className="area-adjust">
                 <Stack gap="sm">
                   <div><span className="tape cyan">{ui.options}</span></div>
                   <Grid gutter="sm">
@@ -236,17 +236,12 @@ export function App() {
                   </Grid>
                 </Stack>
               </Card>
-            </Stack>
-          </Grid.Col>
-
-          <Grid.Col span={{ base: 12, md: 7 }}>
-            <Stack gap="lg">
-              {parsed.error && <Alert color="spray" variant="filled" radius="lg" className="panel">{ui.parseError}</Alert>}
+              {parsed.error && <Alert color="spray" variant="filled" radius="lg" className="panel area-result">{ui.parseError}</Alert>}
               {!result && !parsed.error && (
-                <Card p="lg"><Text fw={600}>{ui.empty}</Text></Card>
+                <Card p="lg" className="area-result"><Text fw={600}>{ui.empty}</Text></Card>
               )}
               {result && (
-                <>
+                <div className="area-result">
                   <Group gap={8} justify="flex-end" wrap="wrap">
                     <CopyButton value={toMarkdown(result.adversary, outLang)}>
                       {({ copied, copy }) => (
@@ -269,7 +264,10 @@ export function App() {
                     <StatBlock adversary={result.adversary} lang={outLang} uiLang={uiLang} />
                   </div>
 
-                  <Card p="lg">
+                </div>
+              )}
+              {result && (
+                <Card p="lg" className="area-notes">
                     <Stack gap="sm">
                       <div><span className="tape">{ui.notes}</span></div>
                       <Text size="sm" fw={500}>{ui.notesHelp}</Text>
@@ -291,11 +289,8 @@ export function App() {
                       </ul>
                     </Stack>
                   </Card>
-                </>
-              )}
-            </Stack>
-          </Grid.Col>
-        </Grid>
+                )}
+        </div>
 
         <Text size="xs" mt={40} maw={720} className="legal">
           {ui.legal}{' '}
