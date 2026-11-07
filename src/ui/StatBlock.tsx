@@ -54,7 +54,7 @@ export function StatBlock({ adversary, lang, uiLang }: Props) {
 
         {r.features.length > 0 && (
           <Stack gap="sm">
-            <div><span className="tape spray">{t.features}</span></div>
+            <div><span className="tape fear">{t.features}</span></div>
             {r.features.map((f, i) => {
               const kind = KIND_CLASS.find((k) => t.kinds[k] === f.kind) ?? 'action';
               return (

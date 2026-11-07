@@ -1,23 +1,30 @@
 import { createTheme, type MantineColorsTuple } from '@mantine/core';
 
-// Spray-paint magenta, the primary "can" of the palette.
-const spray: MantineColorsTuple = [
-  '#fff0f7', '#ffd6e9', '#ffadd2', '#ff80b9', '#ff57a2', '#ff3d93', '#ff2e88', '#e6157a', '#c80a68', '#a30052',
+// Daggerheart palette: Hope (gold) and Fear (violet), the Duality Dice,
+// plus domain-card colors used as accents.
+const hope: MantineColorsTuple = [
+  '#fff8e6', '#ffefc4', '#fde29a', '#f9d26c', '#f6c54d', '#f4bd40', '#f2b83b', '#d89d22', '#bf8812', '#a37100',
 ];
-const cyan: MantineColorsTuple = [
-  '#e3fbff', '#c4f4fd', '#8fe9fa', '#59ddf7', '#33d4f5', '#23d5f5', '#0fbfe0', '#00a6c7', '#0090ad', '#007a94',
+const fear: MantineColorsTuple = [
+  '#f3edfd', '#e2d6f8', '#c5adf0', '#a783e9', '#8f61e2', '#8352d8', '#7c4dcc', '#6a3db5', '#5d35a1', '#4f2a8c',
 ];
-const lime: MantineColorsTuple = [
-  '#f2fce6', '#e1f8c8', '#c6f095', '#a9e85f', '#93e23a', '#8be03c', '#74c823', '#5fa816', '#4c880c', '#386603',
+const codex: MantineColorsTuple = [
+  '#e8f4fd', '#d1e8fa', '#a6d1f3', '#79b9ec', '#5aa9e6', '#4a9fe3', '#3d97e1', '#2d83c8', '#2174b4', '#08649f',
+];
+const sage: MantineColorsTuple = [
+  '#ebf8ed', '#d9f0dc', '#b4e1b9', '#8cd193', '#6fc27a', '#5bba67', '#50b65d', '#409f4c', '#368d42', '#287a35',
+];
+const blade: MantineColorsTuple = [
+  '#fdecee', '#f8d6da', '#f0aab3', '#e97c8a', '#e0566b', '#de4a5f', '#dd3c54', '#c42e45', '#af263d', '#991a33',
 ];
 
 export const theme = createTheme({
-  primaryColor: 'spray',
+  primaryColor: 'hope',
   primaryShade: 6,
-  colors: { spray, cyan, lime },
+  colors: { hope, fear, codex, sage, blade },
   autoContrast: true,
   luminanceThreshold: 0.45,
-  black: '#141019',
+  black: '#1a0f28',
   defaultRadius: 'lg',
   fontFamily: '"Archivo Variable", Archivo, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
   headings: {

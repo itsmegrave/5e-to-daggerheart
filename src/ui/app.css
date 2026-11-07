@@ -5,15 +5,19 @@
   The one loud element is the tier sticker slapped crooked on the stat block; its color encodes the tier.
 */
 :root {
-  --ink: #141019;          /* outlines and text */
+  /* Daggerheart palette: Hope (gold) and Fear (violet), the two Duality Dice,
+     plus domain-card colors (Sage, Codex, Blade) as the extra paint cans. */
+  --ink: #1a0f28;          /* outlines and text, violet-black */
   --paper: #ffffff;        /* sticker panels */
-  --page: #ffe14d;         /* spray-yellow wall */
-  --dots: rgba(20, 16, 25, 0.12);
-  --spray: #ff2e88;        /* magenta can */
-  --cyan: #23d5f5;
-  --lime: #8be03c;
-  --violet: #7b4dff;
-  --muted: #5b5466;
+  --page: #ece4f7;         /* pale lavender wall */
+  --dots: rgba(124, 77, 204, 0.2);
+  --hope: #f2b83b;         /* Hope die gold */
+  --fear: #7c4dcc;         /* Fear die violet */
+  --fear-soft: #b593f2;    /* Fear as a fill that keeps dark text readable */
+  --codex: #5aa9e6;        /* Codex blue */
+  --sage: #6fc27a;         /* Sage green */
+  --blade: #e0566b;        /* Blade crimson */
+  --muted: #5e5170;
   --shadow: var(--ink);
   --field: #ffffff;
 
@@ -26,16 +30,16 @@
 }
 
 [data-mantine-color-scheme='dark'] {
-  --ink: #0a0710;
-  --paper: #251d3d;
-  --page: #18122b;         /* night asphalt */
-  --dots: rgba(123, 77, 255, 0.22);
-  --muted: #bdb3d6;
-  --shadow: #ff2e88;       /* neon shadows at night */
-  --field: #1c1630;
-  --mantine-color-body: #18122b;
-  --mantine-color-text: #f6f2ff;
-  --mantine-color-dimmed: #bdb3d6;
+  --ink: #0b0614;
+  --paper: #23173b;
+  --page: #140b22;         /* the dark of a Fear-heavy night */
+  --dots: rgba(242, 184, 59, 0.12);
+  --muted: #c3b5dc;
+  --shadow: #f2b83b;       /* gold shadows at night */
+  --field: #1b1230;
+  --mantine-color-body: #140b22;
+  --mantine-color-text: #f5efff;
+  --mantine-color-dimmed: #c3b5dc;
 }
 
 html, body { background: var(--page); }
@@ -55,7 +59,7 @@ body {
   z-index: 20;
   background: var(--ink);
   color: #fff;
-  border-bottom: var(--stroke) solid var(--spray);
+  border-bottom: var(--stroke) solid var(--hope);
   padding-block: 10px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -75,7 +79,7 @@ body::before {
   white-space: nowrap;
   color: #fff;
 }
-.street-logo .arrow { color: var(--lime); }
+.street-logo .arrow { color: var(--sage); }
 
 /* ---------- hero ---------- */
 .hero {
@@ -92,23 +96,23 @@ body::before {
   -webkit-text-stroke: clamp(1.5px, 0.35vw, 3px) var(--ink);
   paint-order: stroke fill;
   text-shadow:
-    4px 4px 0 var(--spray),
-    8px 8px 0 var(--cyan),
+    4px 4px 0 var(--fear),
+    8px 8px 0 var(--hope),
     11px 11px 0 var(--ink);
   transform: skew(-6deg) rotate(-2deg);
   transform-origin: left bottom;
   text-wrap: balance;
 }
-.hero-title .five { color: var(--lime); }
+.hero-title .five { color: var(--sage); }
 .hero-tag {
   display: inline-block;
   margin-top: clamp(10px, 2vw, 16px);
   font-family: var(--font-tag);
   font-size: clamp(22px, 4.5vw, 36px);
-  color: var(--spray);
+  color: var(--hope);
   transform: rotate(-7deg);
   margin-left: clamp(4px, 2vw, 20px);
-  text-shadow: 2px 2px 0 var(--ink);
+  text-shadow: 2px 2px 0 var(--ink), -1px -1px 0 var(--ink);
 }
 .hero-sub {
   font-size: clamp(15px, 2.2vw, 18px);
@@ -117,7 +121,7 @@ body::before {
   margin-top: 14px;
   color: var(--ink);
 }
-[data-mantine-color-scheme='dark'] .hero-sub { color: #f6f2ff; }
+[data-mantine-color-scheme='dark'] .hero-sub { color: #f5efff; }
 
 /* ---------- stickers ---------- */
 .panel {
@@ -142,13 +146,13 @@ body::before {
   font-weight: 400;
   font-size: 15px;
   padding: 3px 12px 2px;
-  background: var(--lime);
+  background: var(--hope);
   color: var(--ink);
   border: 2px solid var(--ink);
   transform: rotate(-1.5deg);
 }
-.tape.cyan { background: var(--cyan); }
-.tape.spray { background: var(--spray); }
+.tape.codex { background: var(--codex); }
+.tape.fear { background: var(--fear-soft); }
 
 /* ---------- buttons ---------- */
 .btn-sticker {
@@ -162,10 +166,10 @@ body::before {
   box-shadow: 0 0 0 var(--ink);
 }
 .btn-sticker:focus-visible {
-  outline: 3px solid var(--cyan);
+  outline: 3px solid var(--codex);
   outline-offset: 2px;
 }
-.street-bar .btn-sticker { border-color: #fff !important; box-shadow: 2px 2px 0 var(--spray); }
+.street-bar .btn-sticker { border-color: #fff !important; box-shadow: 2px 2px 0 var(--hope); }
 
 /* Example stickers: each its own can of paint, slapped slightly crooked. */
 .sample-sticker {
@@ -180,11 +184,11 @@ body::before {
   box-shadow: 2px 2px 0 var(--ink);
   transition: transform 80ms ease, box-shadow 80ms ease;
 }
-.sample-sticker:nth-child(5n + 1) { background: var(--lime); transform: rotate(-2deg); }
-.sample-sticker:nth-child(5n + 2) { background: var(--cyan); transform: rotate(1.5deg); }
-.sample-sticker:nth-child(5n + 3) { background: var(--spray); transform: rotate(-1deg); }
-.sample-sticker:nth-child(5n + 4) { background: #ffe14d; transform: rotate(2deg); }
-.sample-sticker:nth-child(5n + 5) { background: #c7b3ff; transform: rotate(-1.5deg); }
+.sample-sticker:nth-child(5n + 1) { background: var(--sage); transform: rotate(-2deg); }
+.sample-sticker:nth-child(5n + 2) { background: var(--codex); transform: rotate(1.5deg); }
+.sample-sticker:nth-child(5n + 3) { background: var(--fear-soft); transform: rotate(-1deg); }
+.sample-sticker:nth-child(5n + 4) { background: var(--hope); transform: rotate(2deg); }
+.sample-sticker:nth-child(5n + 5) { background: #f49aa8; transform: rotate(-1.5deg); }
 .sample-sticker:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
 .sample-sticker:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 
@@ -194,8 +198,8 @@ body::before {
   border: 2px solid var(--ink) !important;
   font-weight: 500;
 }
-[data-mantine-color-scheme='dark'] .field { border-color: #000 !important; color: #f6f2ff; }
-.field:focus { outline: 3px solid var(--cyan); outline-offset: 1px; }
+[data-mantine-color-scheme='dark'] .field { border-color: #000 !important; color: #f5efff; }
+.field:focus { outline: 3px solid var(--codex); outline-offset: 1px; }
 textarea.stat-input {
   font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   font-size: 13px;
@@ -232,10 +236,10 @@ textarea.stat-input {
 }
 .tier-sticker .tier-num { font-family: var(--font-display); font-size: 26px; line-height: 1; }
 .tier-sticker .tier-type { font-weight: 800; font-size: 13px; line-height: 1.2; }
-.tier-1 { background: var(--lime); }
-.tier-2 { background: var(--cyan); }
-.tier-3 { background: var(--spray); }
-.tier-4 { background: #ffe14d; }
+.tier-1 { background: var(--sage); }
+.tier-2 { background: var(--codex); }
+.tier-3 { background: var(--fear-soft); }
+.tier-4 { background: var(--hope); }
 
 .stat-row {
   display: grid;
@@ -265,15 +269,15 @@ textarea.stat-input {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
-.attack-strip b { color: var(--lime); }
+.attack-strip b { color: var(--hope); }
 
 .feature {
-  border-left: 5px solid var(--cyan);
+  border-left: 5px solid var(--codex);
   padding: 2px 0 2px 12px;
 }
-.feature.k-passive { border-left-color: var(--lime); }
-.feature.k-action { border-left-color: var(--spray); }
-.feature.k-reaction { border-left-color: var(--violet); }
+.feature.k-passive { border-left-color: var(--sage); }
+.feature.k-action { border-left-color: var(--blade); }
+.feature.k-reaction { border-left-color: var(--fear); }
 .feature-title { font-weight: 800; }
 
 .review-flag {
@@ -282,7 +286,7 @@ textarea.stat-input {
   padding: 0 8px;
   border: 2px solid var(--ink);
   border-radius: 999px;
-  background: #ffe14d;
+  background: var(--hope);
   color: var(--ink);
   font-size: 11px;
   font-weight: 800;
@@ -300,9 +304,9 @@ textarea.stat-input {
   border: 2px solid var(--ink);
   border-radius: 50%;
 }
-.note-dot.info { background: var(--cyan); }
-.note-dot.review { background: #ffe14d; }
-.note-dot.dropped { background: var(--spray); }
+.note-dot.info { background: var(--codex); }
+.note-dot.review { background: var(--hope); }
+.note-dot.dropped { background: var(--blade); }
 .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; font-weight: 700; }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
 .legend .note-dot { margin-top: 0; }
@@ -336,7 +340,7 @@ textarea.stat-input {
   padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
 }
 .legal { color: var(--ink); opacity: 0.75; }
-[data-mantine-color-scheme='dark'] .legal { color: #f6f2ff; }
+[data-mantine-color-scheme='dark'] .legal { color: #f5efff; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }

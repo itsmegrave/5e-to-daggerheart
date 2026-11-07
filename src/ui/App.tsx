@@ -57,7 +57,7 @@ export function App() {
   useEffect(() => { save('5e2dh-lang', uiLang); document.documentElement.lang = uiLang === 'pt' ? 'pt-BR' : 'en'; }, [uiLang]);
   useEffect(() => { save('5e2dh-input', input); }, [input]);
   useEffect(() => {
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', scheme === 'dark' ? '#0a0710' : '#141019');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', scheme === 'dark' ? '#0b0614' : '#1a0f28');
   }, [scheme]);
 
   const parsed = useMemo((): { monsters: Monster5e[]; error: boolean } => {
@@ -121,24 +121,24 @@ export function App() {
             <SegmentedControl
               size="xs"
               radius="xl"
-              color="spray"
+              color="hope"
               value={uiLang}
               onChange={(v) => { setUiLang(v as Lang); setOutLang(v as Lang); }}
               data={[{ value: 'pt', label: 'PT' }, { value: 'en', label: 'EN' }]}
               aria-label={ui.uiLang}
             />
             <Tooltip label={ui.rules}>
-              <ActionIcon component="a" href={RULES[uiLang]} target="_blank" rel="noopener" color="lime" size="lg" aria-label={ui.rules}>
+              <ActionIcon component="a" href={RULES[uiLang]} target="_blank" rel="noopener" color="sage" size="lg" aria-label={ui.rules}>
                 <IconBook size={18} />
               </ActionIcon>
             </Tooltip>
             <Tooltip label={ui.source}>
-              <ActionIcon component="a" href={REPO} target="_blank" rel="noopener" color="cyan" size="lg" aria-label={ui.source} visibleFrom="xs">
+              <ActionIcon component="a" href={REPO} target="_blank" rel="noopener" color="codex" size="lg" aria-label={ui.source} visibleFrom="xs">
                 <IconBrandGithub size={18} />
               </ActionIcon>
             </Tooltip>
             <Tooltip label={ui.themeToggle}>
-              <ActionIcon color="yellow" size="lg" aria-label={ui.themeToggle} onClick={() => setColorScheme(scheme === 'dark' ? 'light' : 'dark')}>
+              <ActionIcon color="hope" size="lg" aria-label={ui.themeToggle} onClick={() => setColorScheme(scheme === 'dark' ? 'light' : 'dark')}>
                 {scheme === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
               </ActionIcon>
             </Tooltip>
@@ -160,7 +160,7 @@ export function App() {
                     <label htmlFor="stat-input" className="tape">{ui.input}</label>
                     <Group gap={8}>
                       <FileButton onChange={onFile} accept="application/json,.json,text/plain,.txt,.md">
-                        {(props) => <Button {...props} size="xs" color="cyan" leftSection={<IconFileUpload size={14} />}>{ui.uploadJson}</Button>}
+                        {(props) => <Button {...props} size="xs" color="codex" leftSection={<IconFileUpload size={14} />}>{ui.uploadJson}</Button>}
                       </FileButton>
                       <Button size="xs" color="gray.0" leftSection={<IconTrash size={14} />} onClick={() => setInput('')}>{ui.clear}</Button>
                     </Group>
@@ -200,7 +200,7 @@ export function App() {
 
               <Card p="lg" className="area-adjust">
                 <Stack gap="sm">
-                  <div><span className="tape cyan">{ui.options}</span></div>
+                  <div><span className="tape codex">{ui.options}</span></div>
                   <Grid gutter="sm">
                     <Grid.Col span={6}>
                       <Select id="tier" label={ui.tier} value={tier} onChange={(v) => setTier(v ?? 'auto')} data={tierOptions} allowDeselect={false} />
@@ -216,7 +216,7 @@ export function App() {
                       <SegmentedControl
                         fullWidth
                         radius="xl"
-                        color="spray"
+                        color="hope"
                         value={outLang}
                         onChange={(v) => setOutLang(v as Lang)}
                         data={[{ value: 'pt', label: 'PT' }, { value: 'en', label: 'EN' }]}
@@ -236,7 +236,7 @@ export function App() {
                   </Grid>
                 </Stack>
               </Card>
-              {parsed.error && <Alert color="spray" variant="filled" radius="lg" className="panel area-result">{ui.parseError}</Alert>}
+              {parsed.error && <Alert color="blade" variant="filled" radius="lg" className="panel area-result">{ui.parseError}</Alert>}
               {!result && !parsed.error && (
                 <Card p="lg" className="area-result"><Text fw={600}>{ui.empty}</Text></Card>
               )}
@@ -245,19 +245,19 @@ export function App() {
                   <Group gap={8} justify="flex-end" wrap="wrap">
                     <CopyButton value={toMarkdown(result.adversary, outLang)}>
                       {({ copied, copy }) => (
-                        <Button size="xs" color="lime" onClick={copy} leftSection={copied ? <IconCheck size={14} /> : <IconCopy size={14} />}>
+                        <Button size="xs" color="sage" onClick={copy} leftSection={copied ? <IconCheck size={14} /> : <IconCopy size={14} />}>
                           {copied ? ui.copied : ui.copyMarkdown}
                         </Button>
                       )}
                     </CopyButton>
                     <CopyButton value={toPlainText(result.adversary, outLang)}>
                       {({ copied, copy }) => (
-                        <Button size="xs" color="cyan" onClick={copy} leftSection={copied ? <IconCheck size={14} /> : <IconCopy size={14} />}>
+                        <Button size="xs" color="codex" onClick={copy} leftSection={copied ? <IconCheck size={14} /> : <IconCopy size={14} />}>
                           {copied ? ui.copied : ui.copyText}
                         </Button>
                       )}
                     </CopyButton>
-                    <Button size="xs" color="spray" onClick={downloadJson} leftSection={<IconDownload size={14} />}>{ui.downloadJson}</Button>
+                    <Button size="xs" color="fear" onClick={downloadJson} leftSection={<IconDownload size={14} />}>{ui.downloadJson}</Button>
                   </Group>
 
                   <div style={{ paddingTop: 10 }}>
