@@ -1,6 +1,6 @@
 import {
-  ActionIcon, Alert, Anchor, AppShell, Badge, Button, Card, Container, CopyButton, FileButton, Grid, Group,
-  NumberInput, SegmentedControl, Select, Stack, Text, TextInput, Textarea, Title, Tooltip,
+  ActionIcon, Alert, Anchor, Button, Card, Container, CopyButton, FileButton, Grid, Group,
+  NumberInput, SegmentedControl, Select, Stack, Text, TextInput, Textarea, Tooltip,
   useComputedColorScheme, useMantineColorScheme,
 } from '@mantine/core';
 import {
@@ -21,7 +21,7 @@ const RULES: Record<Lang, string> = {
   pt: `${REPO}/blob/main/docs/REGRAS_DE_CONVERSAO.md`,
 };
 const TYPES: AdversaryType[] = ['bruiser', 'horde', 'leader', 'minion', 'ranged', 'skulk', 'social', 'solo', 'standard', 'support'];
-const LEVEL_COLOR: Record<NoteLevel, string> = { info: 'gray', review: 'yellow', dropped: 'red' };
+const LEVELS: NoteLevel[] = ['info', 'review', 'dropped'];
 
 function load(key: string, fallback: string): string {
   try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; }
@@ -39,7 +39,7 @@ function initialLang(): Lang {
 export function App() {
   const [uiLang, setUiLang] = useState<Lang>(initialLang);
   const [outLang, setOutLang] = useState<Lang>(uiLang);
-  const [input, setInput] = useState<string>(() => load('5e2dh-input', SAMPLES.find((s) => s.id === 'ogre')!.text));
+  const [input, setInput] = useState<string>(() => load('5e2dh-input', SAMPLES.find((s) => s.id === 'adult-red-dragon')!.text));
   const [pick, setPick] = useState(0);
   const [tier, setTier] = useState<string>('auto');
   const [type, setType] = useState<string>('auto');
@@ -54,6 +54,9 @@ export function App() {
 
   useEffect(() => { save('5e2dh-lang', uiLang); document.documentElement.lang = uiLang === 'pt' ? 'pt-BR' : 'en'; }, [uiLang]);
   useEffect(() => { save('5e2dh-input', input); }, [input]);
+  useEffect(() => {
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', scheme === 'dark' ? '#0a0710' : '#141019');
+  }, [scheme]);
 
   const parsed = useMemo((): { monsters: Monster5e[]; error: boolean } => {
     try { return { monsters: parseInput(input), error: false }; } catch { return { monsters: [], error: true }; }
@@ -108,194 +111,199 @@ export function App() {
   ];
 
   return (
-    <AppShell header={{ height: 60 }} padding={0}>
-      <AppShell.Header className="app-header">
-        <Group h="100%" justify="space-between" wrap="nowrap" gap="xs">
-          <Group gap={8} wrap="nowrap" miw={0}>
-            <img src="/favicon.svg" alt="" width={28} height={28} />
-            <Title order={1} size="h4" style={{ whiteSpace: 'nowrap' }}>{ui.appTitle}</Title>
-          </Group>
-          <Group gap={6} wrap="nowrap">
+    <>
+      <header className="street-bar">
+        <Group justify="space-between" wrap="nowrap" gap="xs" maw={1320} mx="auto">
+          <span className="street-logo">5e <span className="arrow">→</span> DH</span>
+          <Group gap={8} wrap="nowrap">
             <SegmentedControl
               size="xs"
+              radius="xl"
+              color="spray"
               value={uiLang}
               onChange={(v) => { setUiLang(v as Lang); setOutLang(v as Lang); }}
               data={[{ value: 'pt', label: 'PT' }, { value: 'en', label: 'EN' }]}
               aria-label={ui.uiLang}
             />
             <Tooltip label={ui.rules}>
-              <ActionIcon component="a" href={RULES[uiLang]} target="_blank" rel="noopener" variant="default" size="lg" aria-label={ui.rules}>
+              <ActionIcon component="a" href={RULES[uiLang]} target="_blank" rel="noopener" color="lime" size="lg" aria-label={ui.rules}>
                 <IconBook size={18} />
               </ActionIcon>
             </Tooltip>
             <Tooltip label={ui.source}>
-              <ActionIcon component="a" href={REPO} target="_blank" rel="noopener" variant="default" size="lg" aria-label={ui.source} visibleFrom="xs">
+              <ActionIcon component="a" href={REPO} target="_blank" rel="noopener" color="cyan" size="lg" aria-label={ui.source} visibleFrom="xs">
                 <IconBrandGithub size={18} />
               </ActionIcon>
             </Tooltip>
             <Tooltip label={ui.themeToggle}>
-              <ActionIcon variant="default" size="lg" aria-label={ui.themeToggle} onClick={() => setColorScheme(scheme === 'dark' ? 'light' : 'dark')}>
+              <ActionIcon color="yellow" size="lg" aria-label={ui.themeToggle} onClick={() => setColorScheme(scheme === 'dark' ? 'light' : 'dark')}>
                 {scheme === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
               </ActionIcon>
             </Tooltip>
           </Group>
         </Group>
-      </AppShell.Header>
+      </header>
 
-      <AppShell.Main>
-        <Container size="xl" py="md" className="app-main">
-          <Text c="dimmed" mb="md">{ui.tagline}</Text>
-          <Grid gutter="md">
-            <Grid.Col span={{ base: 12, md: 5 }}>
-              <Stack gap="md">
-                <Card withBorder>
-                  <Stack gap="sm">
-                    <Group justify="space-between" align="flex-end" wrap="wrap" gap="xs">
-                      <Text fw={700} component="label" htmlFor="stat-input">{ui.input}</Text>
-                      <Group gap={6}>
-                        <FileButton onChange={onFile} accept="application/json,.json,text/plain,.txt,.md">
-                          {(props) => <Button {...props} size="xs" variant="default" leftSection={<IconFileUpload size={14} />}>{ui.uploadJson}</Button>}
-                        </FileButton>
-                        <Button size="xs" variant="subtle" color="gray" leftSection={<IconTrash size={14} />} onClick={() => setInput('')}>{ui.clear}</Button>
-                      </Group>
+      <Container size={1320} className="app-main">
+        <section className="hero">
+          <h1 className="hero-title"><span className="five">5e</span> → Daggerheart</h1>
+          <span className="hero-tag" aria-hidden="true">{ui.heroTag}</span>
+          <p className="hero-sub">{ui.tagline}</p>
+        </section>
+
+        <Grid gutter={{ base: 'lg', md: 28 }}>
+          <Grid.Col span={{ base: 12, md: 5 }}>
+            <Stack gap="lg">
+              <Card p="lg">
+                <Stack gap="sm">
+                  <Group justify="space-between" align="center" wrap="wrap" gap="xs">
+                    <label htmlFor="stat-input" className="tape">{ui.input}</label>
+                    <Group gap={8}>
+                      <FileButton onChange={onFile} accept="application/json,.json,text/plain,.txt,.md">
+                        {(props) => <Button {...props} size="xs" color="cyan" leftSection={<IconFileUpload size={14} />}>{ui.uploadJson}</Button>}
+                      </FileButton>
+                      <Button size="xs" color="gray.0" leftSection={<IconTrash size={14} />} onClick={() => setInput('')}>{ui.clear}</Button>
                     </Group>
-                    <Textarea
-                      id="stat-input"
-                      value={input}
-                      onChange={(e) => { setInput(e.currentTarget.value); setPick(0); }}
-                      placeholder={ui.inputPlaceholder}
-                      description={ui.inputHelp}
-                      autosize
-                      minRows={8}
-                      maxRows={22}
-                      spellCheck={false}
-                      classNames={{ input: 'stat-input' }}
+                  </Group>
+                  <Textarea
+                    id="stat-input"
+                    value={input}
+                    onChange={(e) => { setInput(e.currentTarget.value); setPick(0); }}
+                    placeholder={ui.inputPlaceholder}
+                    description={ui.inputHelp}
+                    autosize
+                    minRows={8}
+                    maxRows={20}
+                    spellCheck={false}
+                    classNames={{ input: 'field stat-input' }}
+                  />
+                  <div>
+                    <Text size="sm" fw={800} mb={8}>{ui.samples}</Text>
+                    <Group gap={10}>
+                      {SAMPLES.map((s) => (
+                        <button type="button" key={s.id} className="sample-sticker" onClick={() => loadSample(s.id)}>{s.label[uiLang]}</button>
+                      ))}
+                    </Group>
+                  </div>
+                  {parsed.monsters.length > 1 && (
+                    <Select
+                      id="pick-monster"
+                      label={ui.pickMonster}
+                      searchable
+                      value={String(pick)}
+                      onChange={(v) => setPick(Number(v ?? 0))}
+                      data={parsed.monsters.map((m, i) => ({ value: String(i), label: `${m.name} (CR ${formatCR(m.cr)})` }))}
                     />
-                    <div>
-                      <Text size="xs" c="dimmed" mb={4}>{ui.samples}</Text>
-                      <Group gap={6}>
-                        {SAMPLES.map((s) => (
-                          <Button key={s.id} size="compact-xs" variant="light" onClick={() => loadSample(s.id)}>{s.label[uiLang]}</Button>
-                        ))}
-                      </Group>
-                    </div>
-                    {parsed.monsters.length > 1 && (
-                      <Select
-                        id="pick-monster"
-                        label={ui.pickMonster}
-                        searchable
-                        value={String(pick)}
-                        onChange={(v) => setPick(Number(v ?? 0))}
-                        data={parsed.monsters.map((m, i) => ({ value: String(i), label: `${m.name} (CR ${formatCR(m.cr)})` }))}
+                  )}
+                </Stack>
+              </Card>
+
+              <Card p="lg">
+                <Stack gap="sm">
+                  <div><span className="tape cyan">{ui.options}</span></div>
+                  <Grid gutter="sm">
+                    <Grid.Col span={6}>
+                      <Select id="tier" label={ui.tier} value={tier} onChange={(v) => setTier(v ?? 'auto')} data={tierOptions} allowDeselect={false} />
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <Select id="type" label={ui.type} value={type} onChange={(v) => setType(v ?? 'auto')} data={typeOptions} allowDeselect={false} />
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <NumberInput id="party" label={ui.partySize} value={party} min={1} max={8} onChange={(v) => setParty(Number(v) || 4)} />
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                      <Text size="sm" fw={500} mb={4}>{ui.outputLang}</Text>
+                      <SegmentedControl
+                        fullWidth
+                        radius="xl"
+                        color="spray"
+                        value={outLang}
+                        onChange={(v) => setOutLang(v as Lang)}
+                        data={[{ value: 'pt', label: 'PT' }, { value: 'en', label: 'EN' }]}
+                        aria-label={ui.outputLang}
                       />
+                    </Grid.Col>
+                    {result && (
+                      <>
+                        <Grid.Col span={{ base: 12, xs: 6 }}>
+                          <TextInput id="name" label={ui.name} placeholder={monster?.name} value={nameOverride} onChange={(e) => setNameOverride(e.currentTarget.value)} />
+                        </Grid.Col>
+                        <Grid.Col span={{ base: 12, xs: 6 }}>
+                          <TextInput id="attack" label={ui.attackName} placeholder={result.adversary.attackName} value={attackOverride} onChange={(e) => setAttackOverride(e.currentTarget.value)} />
+                        </Grid.Col>
+                      </>
                     )}
-                  </Stack>
-                </Card>
+                  </Grid>
+                </Stack>
+              </Card>
+            </Stack>
+          </Grid.Col>
 
-                <Card withBorder>
-                  <Stack gap="sm">
-                    <Text fw={700}>{ui.options}</Text>
-                    <Grid gutter="sm">
-                      <Grid.Col span={{ base: 6 }}>
-                        <Select id="tier" label={ui.tier} value={tier} onChange={(v) => setTier(v ?? 'auto')} data={tierOptions} allowDeselect={false} />
-                      </Grid.Col>
-                      <Grid.Col span={{ base: 6 }}>
-                        <Select id="type" label={ui.type} value={type} onChange={(v) => setType(v ?? 'auto')} data={typeOptions} allowDeselect={false} />
-                      </Grid.Col>
-                      <Grid.Col span={{ base: 6 }}>
-                        <NumberInput id="party" label={ui.partySize} value={party} min={1} max={8} onChange={(v) => setParty(Number(v) || 4)} />
-                      </Grid.Col>
-                      <Grid.Col span={{ base: 6 }}>
-                        <Text size="sm" fw={500} mb={4}>{ui.outputLang}</Text>
-                        <SegmentedControl
-                          fullWidth
-                          value={outLang}
-                          onChange={(v) => setOutLang(v as Lang)}
-                          data={[{ value: 'pt', label: 'Português' }, { value: 'en', label: 'English' }]}
-                          aria-label={ui.outputLang}
-                        />
-                      </Grid.Col>
-                      {result && (
-                        <>
-                          <Grid.Col span={{ base: 12, xs: 6 }}>
-                            <TextInput id="name" label={ui.name} placeholder={monster?.name} value={nameOverride} onChange={(e) => setNameOverride(e.currentTarget.value)} />
-                          </Grid.Col>
-                          <Grid.Col span={{ base: 12, xs: 6 }}>
-                            <TextInput id="attack" label={ui.attackName} placeholder={result.adversary.attackName} value={attackOverride} onChange={(e) => setAttackOverride(e.currentTarget.value)} />
-                          </Grid.Col>
-                        </>
+          <Grid.Col span={{ base: 12, md: 7 }}>
+            <Stack gap="lg">
+              {parsed.error && <Alert color="spray" variant="filled" radius="lg" className="panel">{ui.parseError}</Alert>}
+              {!result && !parsed.error && (
+                <Card p="lg"><Text fw={600}>{ui.empty}</Text></Card>
+              )}
+              {result && (
+                <>
+                  <Group gap={8} justify="flex-end" wrap="wrap">
+                    <CopyButton value={toMarkdown(result.adversary, outLang)}>
+                      {({ copied, copy }) => (
+                        <Button size="xs" color="lime" onClick={copy} leftSection={copied ? <IconCheck size={14} /> : <IconCopy size={14} />}>
+                          {copied ? ui.copied : ui.copyMarkdown}
+                        </Button>
                       )}
-                    </Grid>
-                  </Stack>
-                </Card>
-              </Stack>
-            </Grid.Col>
+                    </CopyButton>
+                    <CopyButton value={toPlainText(result.adversary, outLang)}>
+                      {({ copied, copy }) => (
+                        <Button size="xs" color="cyan" onClick={copy} leftSection={copied ? <IconCheck size={14} /> : <IconCopy size={14} />}>
+                          {copied ? ui.copied : ui.copyText}
+                        </Button>
+                      )}
+                    </CopyButton>
+                    <Button size="xs" color="spray" onClick={downloadJson} leftSection={<IconDownload size={14} />}>{ui.downloadJson}</Button>
+                  </Group>
 
-            <Grid.Col span={{ base: 12, md: 7 }}>
-              <Stack gap="md">
-                {parsed.error && <Alert color="red" variant="light">{ui.parseError}</Alert>}
-                {!result && !parsed.error && (
-                  <Card withBorder><Text c="dimmed">{ui.empty}</Text></Card>
-                )}
-                {result && (
-                  <>
-                    <Group justify="space-between" wrap="wrap" gap="xs">
-                      <Title order={2} size="h4">{ui.result}</Title>
-                      <Group gap={6}>
-                        <CopyButton value={toMarkdown(result.adversary, outLang)}>
-                          {({ copied, copy }) => (
-                            <Button size="xs" variant="default" onClick={copy} leftSection={copied ? <IconCheck size={14} /> : <IconCopy size={14} />}>
-                              {copied ? ui.copied : ui.copyMarkdown}
-                            </Button>
-                          )}
-                        </CopyButton>
-                        <CopyButton value={toPlainText(result.adversary, outLang)}>
-                          {({ copied, copy }) => (
-                            <Button size="xs" variant="default" onClick={copy} leftSection={copied ? <IconCheck size={14} /> : <IconCopy size={14} />}>
-                              {copied ? ui.copied : ui.copyText}
-                            </Button>
-                          )}
-                        </CopyButton>
-                        <Button size="xs" variant="default" onClick={downloadJson} leftSection={<IconDownload size={14} />}>{ui.downloadJson}</Button>
-                      </Group>
-                    </Group>
-
+                  <div style={{ paddingTop: 10 }}>
                     <StatBlock adversary={result.adversary} lang={outLang} uiLang={uiLang} />
+                  </div>
 
-                    <Card withBorder>
-                      <Stack gap="xs">
-                        <div>
-                          <Title order={3} size="h5">{ui.notes}</Title>
-                          <Text size="xs" c="dimmed">{ui.notesHelp}</Text>
-                        </div>
-                        <ul className="notes-list" style={{ margin: 0, paddingLeft: 0, listStyle: 'none' }}>
-                          {result.notes.map((n, i) => (
-                            <li key={i}>
-                              <Group gap={8} wrap="nowrap" align="flex-start">
-                                <Badge size="xs" variant="light" color={LEVEL_COLOR[n.level]} miw={92} style={{ flexShrink: 0, marginTop: 3 }}>
-                                  {ui.noteLevels[n.level]}
-                                </Badge>
-                                <Text size="sm" style={{ minWidth: 0 }}>{noteText(n, uiLang)}</Text>
-                              </Group>
-                            </li>
-                          ))}
-                        </ul>
-                      </Stack>
-                    </Card>
-                  </>
-                )}
-              </Stack>
-            </Grid.Col>
-          </Grid>
+                  <Card p="lg">
+                    <Stack gap="sm">
+                      <div><span className="tape">{ui.notes}</span></div>
+                      <Text size="sm" fw={500}>{ui.notesHelp}</Text>
+                      <div className="legend" aria-hidden="true">
+                        {LEVELS.map((l) => <span key={l}><i className={`note-dot ${l}`} />{ui.noteLevels[l]}</span>)}
+                      </div>
+                      <ul className="notes-list">
+                        {result.notes.map((n, i) => (
+                          <li key={i}>
+                            <Group gap={10} wrap="nowrap" align="flex-start">
+                              <i className={`note-dot ${n.level}`} title={ui.noteLevels[n.level]} />
+                              <Text size="sm" style={{ minWidth: 0 }}>
+                                <span className="sr-only">{ui.noteLevels[n.level]}: </span>
+                                {noteText(n, uiLang)}
+                              </Text>
+                            </Group>
+                          </li>
+                        ))}
+                      </ul>
+                    </Stack>
+                  </Card>
+                </>
+              )}
+            </Stack>
+          </Grid.Col>
+        </Grid>
 
-          <Text size="xs" c="dimmed" mt="xl" maw={720}>
-            {ui.legal}{' '}
-            <Anchor href={RULES[uiLang]} target="_blank" rel="noopener" size="xs">{ui.rules}</Anchor>
-            {' · '}
-            <Anchor href={REPO} target="_blank" rel="noopener" size="xs">{ui.source}</Anchor>
-          </Text>
-        </Container>
-      </AppShell.Main>
-    </AppShell>
+        <Text size="xs" mt={40} maw={720} className="legal">
+          {ui.legal}{' '}
+          <Anchor href={RULES[uiLang]} target="_blank" rel="noopener" size="xs" fw={700} c="inherit" td="underline">{ui.rules}</Anchor>
+          {', '}
+          <Anchor href={REPO} target="_blank" rel="noopener" size="xs" fw={700} c="inherit" td="underline">{ui.source}</Anchor>
+        </Text>
+      </Container>
+    </>
   );
 }
